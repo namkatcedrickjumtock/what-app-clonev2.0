@@ -12,16 +12,6 @@ import {
 function Login() {
   const SignIn = () => {
     signInWithPopup(auth, provider).catch(alert);
-    // signInWithPopup(provider)
-    //   .then((result) => {
-    //     // This gives you a Google Access Token. You can use it to access the Google API.
-    //     const credential = GoogleAuthProvider.credentialFromResult(result);
-    //     const token = credential.accessToken;
-    //     const user = result.user;
-    //   })
-    //   .catch((err) => {
-    //     alert("couldn'y sign in because", err);
-    //   });
   };
   return (
     <Container>

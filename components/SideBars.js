@@ -1,21 +1,31 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
-import { Avatar } from "@material-ui/core";
 import ChatIcon from "@material-ui/icons/Chat";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import IconButton from "@material-ui/core/IconButton";
 import SearchIcon from "@material-ui/icons/Search";
-import { Button } from "@material-ui/core";
+import { Button,IconButton ,Avatar} from "@material-ui/core";
 import * as EmailValidator from "email-validator";
-import { signOut } from "firebase/auth";
-import { auth, db } from "../firebase";
-import { collection, doc, query, addDoc, where } from "firebase/firestore";
+import {
+  auth,
+  db,
+  signOut,
+  collection,
+  doc,
+  query,
+  addDoc,
+  where,
+} from "../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useCollection } from "react-firebase-hooks/firestore";
 
 function SideBars() {
   const [user] = useAuthState(auth);
   const collectionRef = collection(db, "chats");
+
+  // Todos
+  // 1 - get current user sign in
+  // 2- check if chat already exists -> check reference email in firestore
+  // 3- return null if chat exist and redirect to chat instead
 
   // query to check email
   const userChatRef = query(
@@ -30,24 +40,19 @@ function SideBars() {
     const input = prompt(
       "Please enter an email address of the person you want to chat with"
     );
-
     if (!input) {
       alert("not valid email");
     }
 
     if (
       EmailValidator.validate(input) &&
-      !chatAlreadyExists(input) &&
       input !== user.email
     ) {
-      // add chats into db
-      const startChat = async () => {
-        await addDoc(collection(db, "chats"), {
-          users: [user.email, input],
-        });
-      };
-      startChat();
-    }   
+      // add chats into db 1-1 chats
+      addDoc(collection(db, "chats"), {
+        users: [user.email, input],
+      });
+    }
   };
 
   // returns true or false !! syntax
@@ -57,17 +62,15 @@ function SideBars() {
         chat.data().users.find((user) => user === recipientEmail)?.length > 0
     );
 
-    const chatsAlreadyExist = async ()=>{
-      
-    }
   return (
     <Container>
       <Header>
-        <UserAvatar
+        <UserAvatar src={user.photoURL} alt='profile'
           onClick={() => {
             signOut(auth);
           }}
         />
+        <p>welcome :{user.displayName}</p>
         <IconButton>
           <ChatIcon />
           <MoreVertIcon />
@@ -81,8 +84,17 @@ function SideBars() {
       </Search>
 
       <SideBarButton onClick={creatChat}>Start a new Chat</SideBarButton>
-
-      {/* list of Chats */}
+      {/* <p>{JSON.stringify(chatSnapShots.docs.find((chats) => {chats}))}</p> */}
+      {/* {
+        chatSnapShots.map((docs) => {
+          <React.Fragment key={docs.id}>
+            {JSON.stringify(docs.data)}
+          </React.Fragment>;
+        }) */}
+        {/* // chatSnapShots.docs.forEach((element) => { */}
+        {/* // console.log(element); */}
+        {/* // }) */}
+      {/* // } */}
     </Container>
   );
 }
@@ -120,7 +132,14 @@ const Search = styled.div`
 const SearchInput = styled.input`
   flex: 1;
   border: none;
+  height: 5vh;
+  outline: none;
   outline-width: none;
+  :focus {
+    border: 3px #0000 solid;
+    border-radius: 50px;
+    background-color: whitesmoke;
+  }
 `;
 
 const SideBarButton = styled(Button)`
