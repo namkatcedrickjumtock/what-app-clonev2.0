@@ -1,15 +1,20 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
-import { Avatar } from "@material-ui/core";
 import ChatIcon from "@material-ui/icons/Chat";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import IconButton from "@material-ui/core/IconButton";
 import SearchIcon from "@material-ui/icons/Search";
-import { Button } from "@material-ui/core";
+import { Button,IconButton ,Avatar} from "@material-ui/core";
 import * as EmailValidator from "email-validator";
-import { signOut } from "firebase/auth";
-import { auth, db } from "../firebase";
-import { collection, doc, query, addDoc, where } from "firebase/firestore";
+import {
+  auth,
+  db,
+  signOut,
+  collection,
+  doc,
+  query,
+  addDoc,
+  where,
+} from "../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useCollection } from "react-firebase-hooks/firestore";
 
@@ -41,7 +46,6 @@ function SideBars() {
 
     if (
       EmailValidator.validate(input) &&
-      !chatAlreadyExists(input) &&
       input !== user.email
     ) {
       // add chats into db 1-1 chats
@@ -61,11 +65,12 @@ function SideBars() {
   return (
     <Container>
       <Header>
-        <UserAvatar
+        <UserAvatar src={user.photoURL} alt='profile'
           onClick={() => {
             signOut(auth);
           }}
         />
+        <p>welcome :{user.displayName}</p>
         <IconButton>
           <ChatIcon />
           <MoreVertIcon />
@@ -80,16 +85,16 @@ function SideBars() {
 
       <SideBarButton onClick={creatChat}>Start a new Chat</SideBarButton>
       {/* <p>{JSON.stringify(chatSnapShots.docs.find((chats) => {chats}))}</p> */}
-      {
+      {/* {
         chatSnapShots.map((docs) => {
           <React.Fragment key={docs.id}>
             {JSON.stringify(docs.data)}
           </React.Fragment>;
-        })
-        // chatSnapShots.docs.forEach((element) => {
-        // console.log(element);
-        // })
-      }
+        }) */}
+        {/* // chatSnapShots.docs.forEach((element) => { */}
+        {/* // console.log(element); */}
+        {/* // }) */}
+      {/* // } */}
     </Container>
   );
 }
