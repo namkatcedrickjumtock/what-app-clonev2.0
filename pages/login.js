@@ -4,7 +4,6 @@ import React from "react";
 import styled from "styled-components";
 import {
   auth,
-  GoogleAuthProvider,
   provider,
   signInWithPopup,
 } from "../firebase";
