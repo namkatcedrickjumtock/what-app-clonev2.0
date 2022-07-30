@@ -3,50 +3,50 @@ import styled from "styled-components";
 import ChatIcon from "@material-ui/icons/Chat";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SearchIcon from "@material-ui/icons/Search";
-import { Button,IconButton ,Avatar} from "@material-ui/core";
+import { Button, IconButton, Avatar } from "@material-ui/core";
 import * as EmailValidator from "email-validator";
 import {
   auth,
   db,
-  signOut,
   collection,
-  doc,
   query,
   addDoc,
   where,
+  collectionRefChats,
 } from "../firebase";
+
+
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useCollection } from "react-firebase-hooks/firestore";
+import Chats from "./Chats";
 
 function SideBars() {
+  
   const [user] = useAuthState(auth);
-  const collectionRef = collection(db, "chats");
+  const [chatsSnapShots, loading, error] = useCollection(collectionRefChats);
 
-  // Todos
-  // 1 - get current user sign in
-  // 2- check if chat already exists -> check reference email in firestore
-  // 3- return null if chat exist and redirect to chat instead
-
-  // query to check email
-  const userChatRef = query(
-    collectionRef,
-    where("users", "array-contains", user.email)
-  );
-
-  // loads snapshot of chats from db
-  const [chatSnapShots] = useCollection(userChatRef);
-
-  const creatChat = () => {
+  const creatChat = async () => {
+    // collectin input from prompt
     const input = prompt(
       "Please enter an email address of the person you want to chat with"
     );
-    if (!input) {
-      alert("not valid email");
-    }
+    // check if email exists query
+    const userChatRef = query(
+      collectionRefChats,
+      where("users", "array-contains", input)
+    );
 
+    const isEmailExists = await getDocs(userChatRef).then((results) =>
+      results.docs.map((fDocs) => fDocs.data().users)
+    );
+
+    console.log(isEmailExists);
+
+    // conditional insetion
     if (
       EmailValidator.validate(input) &&
-      input !== user.email
+      input !== user.email &&
+      isEmailExists.length == 0
     ) {
       // add chats into db 1-1 chats
       addDoc(collection(db, "chats"), {
@@ -55,22 +55,16 @@ function SideBars() {
     }
   };
 
-  // returns true or false !! syntax
-  const chatAlreadyExists = async (recipientEmail) =>
-    !!chatSnapShots?.docs.find(
-      (chat) =>
-        chat.data().users.find((user) => user === recipientEmail)?.length > 0
-    );
-
   return (
     <Container>
       <Header>
-        <UserAvatar src={user.photoURL} alt='profile'
+        <UserAvatar
+          src={user.photoURL}
+          alt={user.displayName[0]}
           onClick={() => {
             signOut(auth);
           }}
         />
-        <p>welcome :{user.displayName}</p>
         <IconButton>
           <ChatIcon />
           <MoreVertIcon />
@@ -83,18 +77,11 @@ function SideBars() {
         <SearchInput placeholder="Search in Chats" />
       </Search>
 
+      {/* list of chats */}
+      {chatsSnapShots?.docs?.map((fDocs) => (
+        <Chats key={fDocs.id} users={fDocs.data().users} />
+      ))}
       <SideBarButton onClick={creatChat}>Start a new Chat</SideBarButton>
-      {/* <p>{JSON.stringify(chatSnapShots.docs.find((chats) => {chats}))}</p> */}
-      {/* {
-        chatSnapShots.map((docs) => {
-          <React.Fragment key={docs.id}>
-            {JSON.stringify(docs.data)}
-          </React.Fragment>;
-        }) */}
-        {/* // chatSnapShots.docs.forEach((element) => { */}
-        {/* // console.log(element); */}
-        {/* // }) */}
-      {/* // } */}
     </Container>
   );
 }
