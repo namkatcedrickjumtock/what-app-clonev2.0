@@ -11,17 +11,17 @@ import {
   collection,
   query,
   addDoc,
+  getDocs,
   where,
+  signOut,
   collectionRefChats,
 } from "../firebase";
-
 
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useCollection } from "react-firebase-hooks/firestore";
 import Chats from "./Chats";
 
 function SideBars() {
-  
   const [user] = useAuthState(auth);
   const [chatsSnapShots, loading, error] = useCollection(collectionRefChats);
 
@@ -76,12 +76,11 @@ function SideBars() {
         <SearchIcon />
         <SearchInput placeholder="Search in Chats" />
       </Search>
-
+      <SideBarButton onClick={creatChat}>Start a new Chat</SideBarButton>
       {/* list of chats */}
       {chatsSnapShots?.docs?.map((fDocs) => (
-        <Chats key={fDocs.id} users={fDocs.data().users} />
+        <Chats key={fDocs.id} id={fDocs.id} users={fDocs.data().users} />
       ))}
-      <SideBarButton onClick={creatChat}>Start a new Chat</SideBarButton>
     </Container>
   );
 }
