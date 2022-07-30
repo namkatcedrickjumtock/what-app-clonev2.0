@@ -8,9 +8,9 @@ import {
   signInWithPopup,
 } from "../firebase";
 
-function Login() {
-  const SignIn = () => {
-    signInWithPopup(auth, provider).catch(alert);
+ function Login()  {
+  const SignIn = async () => {
+   await signInWithPopup(auth, provider).catch(alert);
   };
   return (
     <Container>
