@@ -4,14 +4,13 @@ import React from "react";
 import styled from "styled-components";
 import {
   auth,
-  GoogleAuthProvider,
   provider,
   signInWithPopup,
 } from "../firebase";
 
-function Login() {
-  const SignIn = () => {
-    signInWithPopup(auth, provider).catch(alert);
+ function Login()  {
+  const SignIn = async () => {
+   await signInWithPopup(auth, provider).catch(alert);
   };
   return (
     <Container>
