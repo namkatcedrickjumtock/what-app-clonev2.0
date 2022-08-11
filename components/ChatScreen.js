@@ -3,15 +3,16 @@ import styled from "styled-components";
 import { AttachFile, MoreVertOutlined } from "@material-ui/icons";
 import { auth } from "../firebase";
 import { useRouter } from "next/router";
+import { orderBy } from "firebase/firestore";
 
-export default function ChatScreen() {
+export default function ChatScreen({ chatData }) {
   return (
     <Container>
       <Header>
-        <Avatar />
+        <Avatar src="null" alt={chatData?.data.users[1][0].toUpperCase()} />
         <HeaderInformation>
-          <h3>Rec Email</h3>
-          <p>Last seen...</p>
+          <h5>{chatData?.data.users[1]}</h5>
+          <p>Last seen..</p>
         </HeaderInformation>
         <HeaderIcons>
           <IconBUtton>
@@ -34,5 +35,4 @@ const HeaderInformation = styled.div``;
 
 const HeaderIcons = styled.div``;
 
-
-const IconBUtton = styled.div``
+const IconBUtton = styled.div``;

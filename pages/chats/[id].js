@@ -3,10 +3,10 @@ import React from "react";
 import styled from "styled-components";
 import SideBars from "../../components/SideBars";
 import ChatScreen from "../../components/ChatScreen.js";
-import { collectionRefChats, doc, getDocs, query, db } from "../../firebase";
-import { orderBy, getDoc, Timestamp } from "firebase/firestore";
+import { db } from "../../firebase";
+import { doc, getDoc } from "firebase/firestore";
 
-export default function Chat() {
+export default function Chat({ chat }) {
   return (
     <Container>
       <Head>
@@ -15,24 +15,15 @@ export default function Chat() {
       {/* 2 children flex */}
       <SideBars />
       <ChatContainer>
-        <ChatScreen />
+        {/* <p>{JSON.stringify(chat).toString()}</p> */}
+        <ChatScreen chatData={chat} />
       </ChatContainer>
     </Container>
   );
 }
 
 export async function getServerSideProps(context) {
-  const docRef = doc(collectionRefChats, context.query.id);
-
-  // const q = query(docRef, orderBy("Timestamp"));
-  const docSnap = await getDoc(docRef).then((doc) => {
-    console.log(doc.id, doc.data());
-  });
-
-  // const chatSnapShot = await getDocs(query(docRef, orderBy("timestamp"))).then((doc) => {
-  //     console.log(doc.id, doc.data());
-  //   }
-  // );
+  const docRef = doc(db, "chats", context.query.id);
 
   // // prep the messages
   // const messages = docSnap?.docs
@@ -47,10 +38,15 @@ export async function getServerSideProps(context) {
   //   }));
 
   // prep the chats
-  // console.log(messages);
-  // const chatRes = await await getDoc(docRef);
-  // return { props: { messages: JSON.stringify(messages), chatRes } };
-  return { props: { msg:'sd' } };
+  const chatResponse = await getDoc(docRef)
+    .then((chatSnapShot) => {
+      return { id: chatSnapShot.id, data: chatSnapShot.data() };
+    })
+    .catch((error) => console.log(`error from server:${error}`));
+    JSON.stringify(chatResponse) 
+  return {
+    props: { chat:chatResponse },
+  };
 }
 
 const Container = styled.div`

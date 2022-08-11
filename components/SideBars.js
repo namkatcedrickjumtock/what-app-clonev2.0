@@ -5,25 +5,16 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SearchIcon from "@material-ui/icons/Search";
 import { Button, IconButton, Avatar } from "@material-ui/core";
 import * as EmailValidator from "email-validator";
-import {
-  auth,
-  db,
-  collection,
-  query,
-  addDoc,
-  getDocs,
-  where,
-  signOut,
-  collectionRefChats,
-} from "../firebase";
+import { auth, db } from "../firebase";
 
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useCollection } from "react-firebase-hooks/firestore";
 import Chats from "./Chats";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 
 function SideBars() {
   const [user] = useAuthState(auth);
-  const [chatsSnapShots, loading, error] = useCollection(collectionRefChats);
+  const [chatsSnapShots, loading, error] = useCollection(collection(db, "chats"));
 
   const creatChat = async () => {
     // collectin input from prompt
@@ -32,7 +23,7 @@ function SideBars() {
     );
     // check if email exists query
     const userChatRef = query(
-      collectionRefChats,
+      collection(db,'chats'),
       where("users", "array-contains", input)
     );
 
