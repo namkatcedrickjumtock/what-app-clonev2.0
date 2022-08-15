@@ -11,6 +11,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useCollection } from "react-firebase-hooks/firestore";
 import Chats from "./Chats";
 import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { signOut } from "firebase/auth";
 
 function SideBars() {
   const [user] = useAuthState(auth);

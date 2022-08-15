@@ -1,16 +1,13 @@
 import { Button } from "@material-ui/core";
+import { signInWithPopup } from "firebase/auth";
 import Head from "next/head";
 import React from "react";
 import styled from "styled-components";
-import {
-  auth,
-  provider,
-  signInWithPopup,
-} from "../firebase";
+import { auth, provider } from "../firebase";
 
- function Login()  {
+function Login() {
   const SignIn = async () => {
-   await signInWithPopup(auth, provider).catch(alert);
+    await signInWithPopup(auth, provider).catch(alert);
   };
   return (
     <Container>

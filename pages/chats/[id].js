@@ -55,9 +55,10 @@ const Container = styled.div`
 const ChatContainer = styled.div`
   flex: 1;
   overflow: scroll;
-  height: 100px;
+  background-color: whitesmoke;
+  height: 100vh;
   ::-webkit-scrollbar {
-    display: none;
+    /* display: none; */
   }
   -ms-overflow-style: none;
   scrollbar-width: none;
