@@ -11,15 +11,18 @@
   "dependencies": {
     "@material-ui/core": "^4.12.4",
     "@material-ui/icons": "^4.11.3",
+    "date-fns": "^2.29.1",
     "dotenv": "^16.0.1",
     "email-validator": "^2.0.4",
     "firebase": "^9.9.0",
+    "moment": "^2.29.4",
     "next": "12.2.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-firebase-hooks": "^5.0.3",
     "react-spinners": "^0.13.3",
-    "styled-components": "^5.3.5"
+    "styled-components": "^5.3.5",
+    "timeago-react": "^3.0.5"
   },
   "devDependencies": {
     "better-react-spinkit": "^2.0.4",

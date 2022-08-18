@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import ChatIcon from "@material-ui/icons/Chat";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
@@ -6,7 +6,6 @@ import SearchIcon from "@material-ui/icons/Search";
 import { Button, IconButton, Avatar } from "@material-ui/core";
 import * as EmailValidator from "email-validator";
 import { auth, db } from "../firebase";
-
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useCollection } from "react-firebase-hooks/firestore";
 import Chats from "./Chats";
@@ -15,7 +14,9 @@ import { signOut } from "firebase/auth";
 
 function SideBars() {
   const [user] = useAuthState(auth);
-  const [chatsSnapShots, loading, error] = useCollection(collection(db, "chats"));
+  const [chatsSnapShots, loading, error] = useCollection(
+    collection(db, "chats")
+  );
 
   const creatChat = async () => {
     // collectin input from prompt
@@ -24,7 +25,7 @@ function SideBars() {
     );
     // check if email exists query
     const userChatRef = query(
-      collection(db,'chats'),
+      collection(db, "chats"),
       where("users", "array-contains", input)
     );
 
@@ -79,7 +80,20 @@ function SideBars() {
 
 export default SideBars;
 
-const Container = styled.div``;
+const Container = styled.div`
+  flex: 0.45;
+  border-right: 1px solid whitesmoke;
+  height: 100vh;
+  min-width: 300px;
+  overflow-y: scroll;
+  max-width: 350px;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+`;
 
 const Header = styled.div`
   display: flex;
