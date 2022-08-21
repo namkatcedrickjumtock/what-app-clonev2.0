@@ -1,20 +1,18 @@
 import { Button } from "@material-ui/core";
+import { signInWithPopup } from "firebase/auth";
 import Head from "next/head";
 import React from "react";
 import styled from "styled-components";
-import {
-  auth,
-  provider,
-  signInWithPopup,
-} from "../firebase";
+import { auth, provider } from "../firebase";
 
- function Login()  {
+function Login() {
   const SignIn = async () => {
-   await signInWithPopup(auth, provider).catch(alert);
+    await signInWithPopup(auth, provider).catch(alert);
   };
   return (
     <Container>
       <Head>
+        <link rel="icon" href="https://1000logos.net/wp-content/uploads/2021/04/WhatsApp-logo.png" />
         <title>Login</title>
       </Head>
 

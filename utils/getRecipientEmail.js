@@ -1,3 +1,3 @@
-const getRecipientEmail = (user, userLoggedIn) =>user?.filter(userToFilter => userToFilter !== userLoggedIn?.email)[0]
+const getRecipientEmail = (user, userLoggedIn) =>user?.filter(userToFilter => userToFilter !== userLoggedIn?.email)
 
 export default getRecipientEmail;
