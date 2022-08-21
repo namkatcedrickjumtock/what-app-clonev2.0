@@ -15,12 +15,13 @@ export default function Chats({ id, users }) {
   const recipientEmail = getRecipientEmail(users, user);
 
   const [recipientSnapShot, loading, error] = useCollection(
-    collection(db,'users'),
+    collection(db, "users"),
     where("email", "==", getRecipientEmail(users, user))
   );
 
   const openChat = () => {
     router.push(`/chats/${id}`);
+    // alert("clicked");
   };
 
   // recipientSnapShot?.docs?.map((fDocs) => console.log(fDocs.id, fDocs.data()));

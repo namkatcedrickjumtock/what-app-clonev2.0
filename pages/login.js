@@ -12,6 +12,7 @@ function Login() {
   return (
     <Container>
       <Head>
+        <link rel="icon" href="https://1000logos.net/wp-content/uploads/2021/04/WhatsApp-logo.png" />
         <title>Login</title>
       </Head>
 
